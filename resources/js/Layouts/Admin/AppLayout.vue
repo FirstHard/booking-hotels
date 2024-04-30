@@ -7,6 +7,7 @@ import Dropdown from "@/Components/Dropdown.vue";
 import DropdownLink from "@/Components/DropdownLink.vue";
 import NavLink from "@/Components/NavLink.vue";
 import ResponsiveNavLink from "@/Components/ResponsiveNavLink.vue";
+import SidebarMenu from "@/Components/Admin/SidebarMenu.vue";
 
 defineProps({
   title: String,
@@ -41,7 +42,7 @@ const logout = () => {
     <div class="min-h-screen bg-gray-100">
       <nav class="bg-white border-b border-gray-100">
         <!-- Primary Navigation Menu -->
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="w-full mx-auto px-4 sm:px-6 lg:px-8">
           <div class="flex justify-between h-16">
             <div class="flex">
               <!-- Logo -->
@@ -53,7 +54,7 @@ const logout = () => {
 
               <!-- Navigation Links -->
               <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                <template v-if="route().current() === 'admin.dashboard'">
+                <template v-if="route().current().startsWith('admin.')">
                   <NavLink :href="route('admin.dashboard')" :active="route().current('admin.dashboard')">
                     Admin Panel
                   </NavLink>
@@ -333,15 +334,21 @@ const logout = () => {
 
       <!-- Page Heading -->
       <header v-if="$slots.header" class="bg-white shadow">
-        <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+        <div class="w-full mx-auto py-6 px-4 sm:px-6 lg:px-8">
           <slot name="header" />
         </div>
       </header>
+      <div class="flex flex-col lg:flex-row">
+        <aside class="w-full lg:w-4/12 xl:w-3/12 2xl:w-2/12 bg-blue-200 p-3 md:py-4 md:px-4 lg:px-6">
+          <h3>Actions</h3>
+          <SidebarMenu />
+        </aside>
 
-      <!-- Page Content -->
-      <main>
-        <slot />
-      </main>
+        <!-- Page Content -->
+        <main class="w-full lg:w-8/12 xl:w-9/12 2xl:w-10/12 p-3 md:py-4 md:px-4 lg:px-6">
+          <slot />
+        </main>
+      </div>
     </div>
   </div>
 </template>

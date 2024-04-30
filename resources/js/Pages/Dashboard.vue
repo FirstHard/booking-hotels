@@ -1,6 +1,11 @@
 <script setup>
 import AppLayout from "@/Layouts/AppLayout.vue";
 import Welcome from "@/Components/Welcome.vue";
+
+defineProps({
+  title: String,
+  user: Object,
+});
 </script>
 
 <template>
