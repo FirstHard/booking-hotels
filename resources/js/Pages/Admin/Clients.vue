@@ -1,15 +1,14 @@
 <script setup>
 import AppLayout from "@/Layouts/Admin/AppLayout.vue";
-import Main from "../../Components/Admin/Main.vue";
+import ClientsList from "@/Components/Admin/ClientsList.vue";
 
 defineProps({
   title: String,
-  user: Object,
 });
 </script>
 
 <template>
-  <AppLayout title="Admin Dashboard">
+  <AppLayout title="Clients">
     <template #header>
       <h1 class="font-semibold text-xl text-gray-800 leading-tight">
         {{ $page.props.title }}
@@ -18,7 +17,7 @@ defineProps({
 
     <div class="py-5">
       <div class="mx-auto sm:px-2">
-        <Main />
+        <ClientsList />
       </div>
     </div>
   </AppLayout>

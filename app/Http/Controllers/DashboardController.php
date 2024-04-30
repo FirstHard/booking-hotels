@@ -8,9 +8,15 @@ use Inertia\Inertia;
 
 class DashboardController extends Controller
 {
+    public function index()
+    {
+    }
+    
     public function dashboard()
     {
-        return Inertia::render('Dashboard');
+        return Inertia::render('Dashboard', [
+            'title' => 'Dashboard',
+        ]);
     }
 
     public function admin(Request $request)
@@ -18,8 +24,9 @@ class DashboardController extends Controller
         $user = $request->user();
         if (Gate::allows('view-admin-panel', auth()->user())) {
             return Inertia::render('Admin/Dashboard', [
-                'user' => $user, // Передаем пользователя в шаблон
-                // Другие данные, которые необходимы для отображения на странице
+                'pageDescription' => 'Page description',
+                'title' => 'Admin Dashboard',
+                'user' => $user,
             ]);
         } else {
             return redirect()->route('dashboard');
