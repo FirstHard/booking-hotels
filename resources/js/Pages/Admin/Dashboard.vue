@@ -1,6 +1,7 @@
 <script setup>
 import AppLayout from "@/Layouts/Admin/AppLayout.vue";
-import Main from "../../Components/Admin/Main.vue";
+import Main from "@/Components/Admin/Main.vue";
+import Navbar from "@/Components/Admin/Navbar.vue";
 
 defineProps({
   title: String,
@@ -10,11 +11,6 @@ defineProps({
 
 <template>
   <AppLayout title="Admin Dashboard">
-    <template #header>
-      <h1 class="font-semibold text-xl text-gray-800 leading-tight">
-        {{ $page.props.title }}
-      </h1>
-    </template>
 
     <div class="py-5">
       <div class="mx-auto sm:px-2">

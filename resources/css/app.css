@@ -5,3 +5,9 @@
 [x-cloak] {
     display: none;
 }
+
+#app {
+    min-height: 100vh;
+    --tw-bg-opacity: 1;
+    background-color: rgb(243 244 246 / var(--tw-bg-opacity));
+}

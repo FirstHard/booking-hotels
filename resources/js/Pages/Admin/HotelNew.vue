@@ -1,6 +1,6 @@
 <script setup>
 import AppLayout from "@/Layouts/Admin/AppLayout.vue";
-import HotelsList from "@/Components/Admin/HotelsList.vue";
+import HotelAdd from "@/Components/Admin/HotelAdd.vue";
 
 defineProps({
   title: String,
@@ -12,7 +12,7 @@ defineProps({
 
     <div class="py-5">
       <div class="mx-auto sm:px-2">
-        <HotelsList />
+        <HotelAdd />
       </div>
     </div>
   </AppLayout>

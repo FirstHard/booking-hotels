@@ -37,6 +37,12 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
         Route::get('/', [DashboardController::class, 'admin'])->name('admin.dashboard');
         Route::get('/hotels', [HotelController::class, 'index'])->name('admin.hotels');
         Route::get('/hotels/new', [HotelController::class, 'new'])->name('admin.hotels.new');
+        Route::post('/hotels', [HotelController::class, 'store'])->name('admin.hotels.store');
+        Route::get('/hotels/{hotel}', [HotelController::class, 'show'])->name('admin.hotels.show');
+        Route::get('/hotels/{hotel}/edit', [HotelController::class, 'edit'])->name('admin.hotels.edit');
+        Route::put('/hotels/{hotel}', [HotelController::class, 'update'])->name('admin.hotels.update');
+        
+        Route::delete('/hotels/{hotel}', [HotelController::class, 'destroy'])->name('admin.hotels.destroy');
         Route::get('/rooms', [RoomController::class, 'index'])->name('admin.rooms');
         Route::get('/rooms/new', [RoomController::class, 'new'])->name('admin.rooms.new');
         Route::get('/reservations', [ReservationController::class, 'index'])->name('admin.reservations');

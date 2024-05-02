@@ -18,6 +18,7 @@ class ReservationController extends Controller
     public function new()
     {
         return Inertia::render('Admin/Reservations', [
+            'pageDescription' => 'Reservations description',
             'title' => 'Add new Reservation',
         ]);
     }

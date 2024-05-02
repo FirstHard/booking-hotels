@@ -18,6 +18,7 @@ class ClientController extends Controller
     public function new()
     {
         return Inertia::render('Admin/Clients', [
+            'pageDescription' => 'Clients description',
             'title' => 'Add new Client',
         ]);
     }

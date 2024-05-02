@@ -18,6 +18,7 @@ class RoomController extends Controller
     public function new()
     {
         return Inertia::render('Admin/Rooms', [
+            'pageDescription' => 'Rooms description',
             'title' => 'Add new Room',
         ]);
     }
