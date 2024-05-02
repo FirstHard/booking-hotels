@@ -1,11 +1,9 @@
 <script setup>
 import { useForm } from "@inertiajs/vue3";
+import { usePage } from "@inertiajs/vue3";
 
-defineProps({ errors: Object });
-
-const handleImageUpload = (event) => {
-  form.image = event.target.files[0];
-};
+const $page = usePage();
+const hotel = $page.props.hotel;
 
 const locationOptions = [
   { value: "0", label: "France, Paris", country: "France", city: "Paris" },
@@ -13,30 +11,35 @@ const locationOptions = [
   { value: "2", label: "Turkey, Ankara", country: "Turkey", city: "Ankara" },
 ];
 
-const form = useForm({
-  name: "",
-  description: "",
-  location: "",
-  country: "",
-  city: "",
-  rating_stars: 5,
-  image: null,
-});
+const findLocationIndex = (country, city) => {
+  const index = locationOptions.findIndex((option) => option.country === country && option.city === city);
+  return index !== -1 ? String(index) : "";
+};
 
+const form = useForm({
+  name: hotel.name ?? "",
+  description: hotel.description ?? "",
+  location: findLocationIndex(hotel.country, hotel.city),
+  country: hotel.country ?? "",
+  city: hotel.city ?? "",
+  rating_stars: hotel.rating_stars ?? 5,
+  image: hotel.image ?? $event.target.files[0],
+});
 const submitForm = () => {
   const selectedLocation = form.location;
   form.country = locationOptions[selectedLocation].country;
   form.city = locationOptions[selectedLocation].city;
 
-  form.post(route("admin.hotels.store"), {
-    preserveScroll: true,
-    onSuccess: () => {
-      form.reset();
-    },
-    onError: (error) => {
-      console.log(error);
-    },
-  });
+  form.post(`/admin/hotels/${hotel.id}`),
+    {
+      preserveScroll: true,
+      onSuccess: () => {
+        form.reset();
+      },
+      onError: (error) => {
+        console.log(error);
+      },
+    };
 };
 </script>
 
@@ -47,7 +50,9 @@ const submitForm = () => {
         <label for="location" class="block text-sm font-medium text-gray-700">Country and City *</label>
         <select id="location" v-model="form.location" class="mt-1 p-2 border border-gray-300 rounded-md w-full" required>
           <option value="" disabled>Select Country and City</option>
-          <option v-for="(item, index) in locationOptions" :key="index" :value="item.value">{{ item.label }}</option>
+          <option v-for="(option, index) in locationOptions" :key="index" :value="option.value">
+            {{ option.label }}
+          </option>
         </select>
         <div v-if="form.errors.location">{{ form.errors.location }}</div>
       </div>
@@ -56,23 +61,25 @@ const submitForm = () => {
         <label for="rating_stars" class="block text-sm font-medium text-gray-700">Rating Stars *</label>
         <select id="rating_stars" v-model="form.rating_stars" class="mt-1 p-2 border border-gray-300 rounded-md w-full" required>
           <option value="" selected disabled>Select stars</option>
-          <option value="1">⭐️</option>
-          <option value="2">⭐️⭐️</option>
-          <option value="3">⭐️⭐️⭐️</option>
-          <option value="4">⭐️⭐️⭐️⭐️</option>
-          <option value="5">⭐️⭐️⭐️⭐️⭐️</option>
-          <option value="6">⭐️⭐️⭐️⭐️⭐️⭐️</option>
-          <option value="7">⭐️⭐️⭐️⭐️⭐️⭐️⭐️</option>
+          <option v-for="star in [1, 2, 3, 4, 5, 6, 7]" :key="star" :value="star">{{ "⭐️".repeat(star) }}</option>
         </select>
         <div v-if="form.errors.rating_stars">{{ form.errors.rating_stars }}</div>
       </div>
 
-      <div class="mb-4mb-4 w-full lg:w-1/3 ms-0 lg:ms-2">
+      <div class="mb-4 w-full lg:w-1/3 ms-0 lg:ms-2">
         <label for="image" class="block text-sm font-medium text-gray-700">Image</label>
-        <input type="file" id="image" @change="handleImageUpload" class="bg-white mt-1 p-1 border border-gray-300 rounded-md w-full" accept="image/*" />
+        <input
+          type="file"
+          id="image"
+          name="image"
+          @change="form.image = $event.target.files[0]"
+          class="bg-white mt-1 p-1 border border-gray-300 rounded-md w-full"
+          accept="image/*"
+        />
         <div v-if="form.errors.image">{{ form.errors.image }}</div>
       </div>
     </div>
+
     <div class="mb-4">
       <label for="name" class="block text-sm font-medium text-gray-700">Name *</label>
       <input type="text" id="name" v-model="form.name" class="mt-1 p-2 border border-gray-300 rounded-md w-full" autocomplete="off" required />
@@ -87,9 +94,6 @@ const submitForm = () => {
 
     <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-md" :disabled="form.processing">Submit</button>
   </form>
-  <div v-if="$page.props.pageDescription" class="bg-white overflow-hidden shadow-xl sm:rounded-lg p-3">
-    <p>{{ $page.props.pageDescription }}</p>
-  </div>
 </template>
 
 <style scoped></style>

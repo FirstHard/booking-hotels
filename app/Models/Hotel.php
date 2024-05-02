@@ -14,7 +14,9 @@ class Hotel extends Model
         'description',
         'country',
         'city',
-        'rating_stars',
         'image',
+        'image_name',
+        'rating_stars',
+        'deleted_at',
     ];
 }

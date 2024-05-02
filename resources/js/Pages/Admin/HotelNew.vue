@@ -8,7 +8,7 @@ defineProps({
 </script>
 
 <template>
-  <AppLayout title="Hotels">
+  <AppLayout title="Hotel New">
 
     <div class="py-5">
       <div class="mx-auto sm:px-2">

@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Hotel;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 
 class HotelController extends Controller
@@ -72,13 +74,45 @@ class HotelController extends Controller
 
     public function edit(Hotel $hotel)
     {
-        return view('admin.hotels.edit', ['hotel' => $hotel]);
+        return Inertia::render('Admin/HotelEdit', [
+            'hotel' => $hotel,
+            'title' => 'Edit Hotel: ' . $hotel->name,
+        ]);
     }
 
     public function update(Request $request, Hotel $hotel)
     {
-        $hotel->update($request->all());
-        return redirect()->route('admin.hotels.index');
+        $request->validate([
+            'name' => 'sometimes|string|max:255',
+            'description' => 'nullable|string',
+            'country' => 'sometimes|string',
+            'city' => 'sometimes|string',
+            'rating_stars' => 'sometimes|integer|min:1|max:7',
+        ]);
+        $hotel->name = $request->input('name');
+        $hotel->description = $request->input('description');
+        $hotel->country = $request->input('country');
+        $hotel->city = $request->input('city');
+        $hotel->rating_stars = $request->input('rating_stars');
+
+        if ($request->hasFile('image')) {
+            $request->validate(['image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp,avif|max:2048']);
+            $imageName = $request->image->getClientOriginalName();
+            $request->image->storeAs('public/images/', $imageName);
+            $request->image->storeAs('public/images/', $imageName);
+
+            if ($hotel->image && Storage::exists('public/images/' . $hotel->image)) {
+                Storage::delete('public/images/' . $hotel->image);
+            }
+
+            $hotel->image = $imageName;
+        }
+
+        if ($hotel->save()) {
+            return redirect()->route('admin.hotels')->with('success', 'Hotel "' . $hotel->name . '" updated successfully');
+        } else {
+            return back()->withErrors(['error' => 'Failed to update Hotel']);
+        }
     }
 
     public function destroy(Hotel $hotel)
