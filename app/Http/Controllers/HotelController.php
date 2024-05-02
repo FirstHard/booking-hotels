@@ -115,9 +115,9 @@ class HotelController extends Controller
         }
     }
 
-    public function destroy(Hotel $hotel)
+    public function delete(Hotel $hotel)
     {
         $hotel->delete();
-        return redirect()->route('admin.hotels.index');
+        return redirect()->route('admin.hotels')->with('success', 'Hotel "' . $hotel->name . '" deleted successfully');
     }
 }

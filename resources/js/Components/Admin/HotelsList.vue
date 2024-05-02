@@ -1,5 +1,20 @@
 <script setup>
 import { Link } from "@inertiajs/vue3";
+import { router } from '@inertiajs/vue3'
+
+const handleDelete = (id) => {
+  if (confirm('Are you sure you want to delete this record?')) {
+    router.delete(route('admin.hotels.delete', { hotel: id }), {
+      preserveScroll: true,
+      onSuccess: () => {
+        // router.visit(route('admin.hotels'));
+      },
+      onError: (error) => {
+        console.error('Error deleting record:', error);
+      },
+    });
+  }
+};
 </script>
 
 <template>
@@ -20,11 +35,12 @@ import { Link } from "@inertiajs/vue3";
         <p>{{ item.description }}</p>
       </div>
       <div class="w-full md:w-1/12 grid flex-col align-center justify-center content-evenly">
-        <!-- <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Edit</button> -->
         <Link :href="route('admin.hotels.edit', { hotel: item.id })" class="bg-blue-500 hover:bg-blue-700 text-center text-white font-bold py-2 px-4 rounded">
           Edit
         </Link>
-        <button class="bg-gray-500 hover:bg-gray-700 text-center text-white font-bold py-2 px-4 rounded">Delete</button>
+        <button @click="handleDelete(item.id)" class="bg-gray-500 hover:bg-gray-700 text-center text-white font-bold py-2 px-4 rounded">
+          Delete
+        </button>
       </div>
     </div>
   </div>
